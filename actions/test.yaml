@@ -1,0 +1,6 @@
+---
+name: test
+description: Run a test
+runner_type: orquesta
+entry_point: workflows/test.yaml
+enabled: true

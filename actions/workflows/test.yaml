@@ -1,0 +1,100 @@
+version: 1.0
+
+description: Test
+
+
+tasks:
+
+  notify_start:
+    action: core.echo
+    input:
+      message: "Starting the test"
+    next:
+      - when: <% succeeded() %>
+        do:
+          - create_server
+
+  create_server:
+    action: mock_cloud_provider.create_server
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - server_id: <% result().output.server_id %>
+          - server: <% result().output.servers.get(result().output.server_id) %>
+        do:
+          - notify_created
+          
+  notify_created:
+    action: core.echo
+    input:
+      message: "New server created with id <% ctx().server_id %>. Server State: <% ctx().server.server_state %>"
+    next:
+      - when: <% succeeded() %>
+        do:
+          - approve_running_commands
+
+  approve_running_commands:
+    action: core.ask
+    input:
+      schema:
+        type: object
+        properties:
+          approved:
+            type: boolean
+            description: "Run commands against server <% ctx().server_id %>?"
+            required: True
+          message:
+            type: string
+            description: "Reason for approval"
+            required: True
+    next:
+      - when: <% task(get_approval).result.response.approved %>
+        do: run_commands
+      - when: <% not task(get_approval).result.response.approved %>
+        do: notify_run_commands_denied
+      - when: <% failed() %>
+        do: notify_ask_failed
+
+  run_commands:
+    action: core.echo
+    input:
+      message: "Commands running against the server....."
+    next:
+      - when: <% succeeded() %>
+        do:
+          - notify_run_commands_succeeded
+          
+  notify_run_commands_succeeded:
+    action: core.echo
+    input:
+      message: "Commands running against the server: success"
+    next:
+      - when: <% succeeded() %>
+        do:
+          - stop_server
+
+  stop_server:
+    action: mock_cloud_provider.update_server
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - server_id: <% ctx().server_id %>
+          - server_state: "stopped"
+        do:
+          - notify_server_updated
+
+
+  notify_server_updated:
+    action: core.echo
+    input:
+      message: "Server stopped"
+
+  notify_run_commands_denied:
+    action: core.echo
+    input:
+      message: "Denied running commands"
+
+  notify_ask_failed:
+    action: core.echo
+    input:
+      message: "Request to run commands failed"
