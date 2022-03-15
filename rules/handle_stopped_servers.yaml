@@ -1,0 +1,12 @@
+---
+name: handle_stopped_servers
+description: Handle stopped servers
+enabled: true
+
+trigger:
+  type: mock_portal.server_stopped
+
+action:
+    ref: mock_portal.restart_stopped_server
+    parameters:
+      server_id: "{{trigger.body.server_id}}"

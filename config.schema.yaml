@@ -1,0 +1,5 @@
+---
+server_config_key_name:
+  description: "ST2 kv key name that holds the server config"
+  type: "string"
+  default: mock-cloud-provider-serverdata

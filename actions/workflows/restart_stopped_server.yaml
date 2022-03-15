@@ -1,0 +1,33 @@
+version: 1.0
+
+description: Restart a stopped server
+
+input:
+  - server_id
+
+tasks:
+
+  notify_server_stopped:
+    action: core.echo
+    input:
+      message: "Server stopped: <% ctx().server_id %>"
+    next:
+      - when: <% succeeded() %>
+        do:
+          - start_server
+
+  start_server:
+    action: mock_cloud_provider.update_server
+    input:
+      server_id: <% ctx().server_id %>
+      server_state: "running"
+    next:
+      - when: <% succeeded() %>
+        do:
+          - notify_server_updated
+
+
+  notify_server_updated:
+    action: core.echo
+    input:
+      message: "Server restarted"

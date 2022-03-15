@@ -1,0 +1,14 @@
+---
+  class_name: RestartServersSensor
+  entry_point: "restart_servers.py"
+  description: "Simple polling sensor that emits triggers when it finds stopped servers."
+  poll_interval: 60
+  enabled: false
+  trigger_types:
+    - name: "start_server"
+      description: "Demonstrates polling/trigger functionality"
+      payload_schema:
+        type: "object"
+        properties:
+          server_id:
+            type: "string"

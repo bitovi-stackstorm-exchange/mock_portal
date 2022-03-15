@@ -1,0 +1,10 @@
+---
+name: restart_stopped_server
+description: Start a stopped server
+runner_type: orquesta
+entry_point: workflows/restart_stopped_server.yaml
+enabled: true
+parameters:
+  server_id:
+    type: string
+    required: true
