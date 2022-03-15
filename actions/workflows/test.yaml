@@ -75,11 +75,11 @@ tasks:
 
   stop_server:
     action: mock_cloud_provider.update_server
+    input:
+      server_id: <% ctx().server_id %>
+      server_state: "stopped"
     next:
       - when: <% succeeded() %>
-        publish:
-          - server_id: <% ctx().server_id %>
-          - server_state: "stopped"
         do:
           - notify_server_updated
 
