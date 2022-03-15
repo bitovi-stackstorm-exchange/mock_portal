@@ -33,7 +33,7 @@ class RestartServersSensor(PollingSensor):
         key_name = self._config.get('server_config_key_name')
         servers_json = self.client.keys.get_by_name(name=key_name)
         if servers_json:
-          self.logger.debug('servers: ' + servers_json)
+          self.logger.debug('servers: ' + servers_json.value)
           servers_object = json.loads(servers_json.value)
           trigger = "mock_portal.server_stopped"
           for server_id, server in servers_object.items():
