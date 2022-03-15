@@ -48,9 +48,9 @@ tasks:
             description: "Reason for approval"
             required: True
     next:
-      - when: <% task(get_approval).result.response.approved %>
+      - when: <% result().result.response.approved %>
         do: run_commands
-      - when: <% not task(get_approval).result.response.approved %>
+      - when: <% not result().result.response.approved %>
         do: notify_run_commands_denied
       - when: <% failed() %>
         do: notify_ask_failed
