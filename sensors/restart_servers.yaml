@@ -5,7 +5,7 @@
   poll_interval: 60
   enabled: false
   trigger_types:
-    - name: "start_server"
+    - name: "server_stopped"
       description: "Demonstrates polling/trigger functionality"
       payload_schema:
         type: "object"
