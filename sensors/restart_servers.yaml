@@ -2,7 +2,7 @@
   class_name: RestartServersSensor
   entry_point: "restart_servers.py"
   description: "Simple polling sensor that emits triggers when it finds stopped servers."
-  poll_interval: 10
+  poll_interval: 30
   enabled: true
   trigger_types:
     - name: "server_stopped"
