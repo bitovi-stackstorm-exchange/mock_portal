@@ -9,4 +9,4 @@ trigger:
 action:
     ref: mock_portal.restart_stopped_server
     parameters:
-      server_id: "{{trigger.body.server_id}}"
+      server_id: "{{trigger.server_id}}"
