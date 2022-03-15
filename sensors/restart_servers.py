@@ -30,7 +30,7 @@ class RestartServersSensor(PollingSensor):
         self.client = Client(base_url='http://localhost')
 
     def poll(self):
-        key_name = self._config.get('server_config_key_name', { "entries": []})
+        key_name = self._config.get('server_config_key_name')
         servers_json = self.client.keys.get_by_name(name=key_name)
         if servers_json:
           self.logger.debug('servers: ' + servers_json)
