@@ -4,3 +4,5 @@ description : Simple mock portal
 version : 0.1.0
 author : Bitovi, LLC
 email : mick@bitovi.com
+dependencies:
+  - https://github.com/bitovi-stackstorm-exchange/mock_cloud_provider.git
