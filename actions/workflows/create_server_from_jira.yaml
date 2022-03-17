@@ -22,8 +22,8 @@ tasks:
 
   approve_create_server:
     action: core.ask
-    route: ManagedDemoServerIssueKey:<% ctx().alert_data.issue.key %>
     input:
+      route: ManagedDemoServerIssueKey:<% ctx().alert_data.issue.key %>
       schema:
         type: object
         properties:
