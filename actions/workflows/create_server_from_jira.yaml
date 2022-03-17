@@ -55,7 +55,7 @@ tasks:
           - set_running
 
   attach_server_id:
-    action: jira.add_field_value
+    action: jira.update_field_value
     input:
       issue_key: <% ctx().alert_data.issue.key %>
       value: <% ctx().server_id %>

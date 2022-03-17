@@ -20,7 +20,7 @@ tasks:
 
   # update the jira ticket
   update_jira_field:
-    action: jira.add_field_value
+    action: jira.update_field_value
     input:
       issue_key: <% ctx().jira_key %>
       value: <% ctx().inquiry_id %>
