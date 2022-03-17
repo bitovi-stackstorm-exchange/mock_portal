@@ -51,8 +51,16 @@ tasks:
           - server_id: <% result().output.server_id %>
           - server: <% result().output.servers.get(result().output.server_id) %>
         do:
-          - attach_server_id
           - set_running
+
+  set_running:
+    action: jira.transition_issue_by_name
+    input:
+      issue: <% ctx().alert_data.issue.key %>
+      transition_name: approved-to-running
+    next:
+      - when: <% succeeded() %>
+        do: attach_server_id
 
   attach_server_id:
     action: jira.update_field_value
@@ -60,12 +68,6 @@ tasks:
       issue_key: <% ctx().alert_data.issue.key %>
       value: <% ctx().server_id %>
       field: <% ctx().server_id_field %>
-
-  set_running:
-    action: jira.transition_issue_by_name
-    input:
-      issue: <% ctx().alert_data.issue.key %>
-      transition_name: approved-to-running
 
   notify_create_server_denied:
     action: core.echo
