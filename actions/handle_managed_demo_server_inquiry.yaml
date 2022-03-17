@@ -1,0 +1,11 @@
+---
+name: handle_managed_demo_server_inquiry
+description: Handle managed demo server inquiry
+runner_type: orquesta
+entry_point: workflows/handle_managed_demo_server_inquiry.yaml
+enabled: true
+parameters:
+  route:
+    type: string
+  inquiry_id:
+    type: string

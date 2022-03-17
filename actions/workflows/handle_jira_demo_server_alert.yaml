@@ -1,0 +1,48 @@
+version: 1.0
+
+input:
+  # jira webhook data
+  - alert_data
+
+vars:
+  - approval_id_field: customfield_10043
+
+tasks:
+  notify:
+    # TODO: send email or chat message
+    action: core.echo
+    input:
+      message: |
+        Got data from Jira
+    next:
+      - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "New" %>
+        do: create_server
+      - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Pending" %>
+        do: noop
+      - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Approved" %>
+        do: approve_server
+      - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Running" %>
+        do: noop
+      - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Destroy" %>
+        do: destroy_server
+      - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Destroyed" %>
+        do: noop
+
+  noop:
+    action: core.noop
+
+  create_server:
+    action: mock_portal.create_server_from_jira
+    input:
+      alert_data: <% ctx().alert_data %>
+
+  approve_server:
+    action: core.local
+    input:
+      cmd: |
+        st2 inquiry respond -r '{"approved": true, "message": "approved from jira"}' <% ctx().alert_data.fields[ctx().approval_id_field].value %>
+
+  destroy_server:
+    action: mock_portal.destroy_server_from_jira
+    input:
+      alert_data: <% ctx().alert_data %>

@@ -1,0 +1,29 @@
+---
+name: handle_jira_demo_server_webhook
+description: Handle Jira Server Webhook for ManagedDemoServer issues
+enabled: true
+
+trigger:
+  type: core.st2.webhook
+  parameters:
+      url: "mock_portal/handle-jira-demo-server-alert"
+
+# only execute for webhook events for issues of type ManagedDemoServer
+criteria:
+  trigger.body.webhookEvent: 
+    type: regex
+    pattern: "jira:issue_(created|updated)"
+  trigger.body.issue.fields.status.name: 
+    type: regex
+    pattern: "(New|Approved|Destroy)"
+  trigger.body.issue.issuetype.name:
+    type: eq
+    pattern: "ManagedDemoServer"
+
+
+
+
+action:
+    ref: mock_portal.handle_jira_demo_server_alert
+    parameters:
+      alert_data: "{{trigger.body}}"

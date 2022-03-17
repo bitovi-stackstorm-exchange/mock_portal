@@ -1,0 +1,10 @@
+---
+name: create_server_from_jira
+description: Create a server from a jira alert
+runner_type: orquesta
+entry_point: workflows/create_server_from_jira.yaml
+enabled: true
+parameters:
+  alert_data:
+    required: true
+    type: object

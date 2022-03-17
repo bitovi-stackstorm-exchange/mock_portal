@@ -1,0 +1,27 @@
+version: 1.0
+
+input:
+  # ManagedDemoServerIssueKey:foo
+  - route
+  - inquiry_id
+
+vars:
+  - approval_id_field: customfield_10043
+
+tasks:
+  parse_route:
+    action: core.noop
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - jira_key: <% <% ctx().route.split(":")[1] %>
+        do:
+          - update_jira_field
+
+  # update the jira ticket
+  update_jira_field:
+    action: jira.add_field_value
+    input:
+      issue_key: <% ctx().jira_key %>
+      value: <% ctx().inquiry_id %>
+      field: <% ctx().approval_id_field %>

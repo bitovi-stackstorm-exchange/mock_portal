@@ -1,0 +1,10 @@
+---
+name: handle_jira_demo_server_alert
+description: Handle jira demo server alert
+runner_type: orquesta
+entry_point: workflows/handle_jira_demo_server_alert.yaml
+enabled: true
+parameters:
+  alert_data:
+    required: true
+    type: object

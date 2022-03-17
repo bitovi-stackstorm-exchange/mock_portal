@@ -1,0 +1,78 @@
+version: 1.0
+
+input:
+  # jira webhook data
+  - alert_data
+
+vars:
+  - approval_id_field: customfield_10043
+  - server_id_field: customfield_10044
+
+tasks:
+
+
+  set_pending:
+    action: jira.transition_issue_by_name
+    input:
+      issue: <% ctx().alert_data.issue.key %>
+      transition_name: new-to-pending
+    next:
+      - when: <% succeeded() %>
+        do: approve_create_server
+
+  approve_create_server:
+    action: core.ask
+    route: ManagedDemoServerIssueKey:<% ctx().alert_data.issue.key %>
+    input:
+      schema:
+        type: object
+        properties:
+          approved:
+            type: boolean
+            description: "Create Server?"
+            required: True
+          message:
+            type: string
+            description: "Reason for approval"
+            required: True
+    next:
+      - when: <% task(approve_create_server).result.response.approved %>
+        do: create_server
+      - when: <% not task(approve_create_server).result.response.approved %>
+        do: notify_create_server_denied
+      - when: <% failed() %>
+        do: notify_ask_failed
+
+  create_server:
+    action: mock_cloud_provider.create_server
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - server_id: <% result().output.server_id %>
+          - server: <% result().output.servers.get(result().output.server_id) %>
+        do:
+          - attach_server_id
+          - set_running
+
+  attach_server_id:
+    action: jira.add_field_value
+    input:
+      issue_key: <% ctx().alert_data.issue.key %>
+      value: <% ctx().server_id %>
+      field: <% ctx().server_id_field %>
+
+  set_running:
+    action: jira.transition_issue_by_name
+    input:
+      issue: <% ctx().alert_data.issue.key %>
+      transition_name: approved-to-running
+
+  notify_create_server_denied:
+    action: core.echo
+    input:
+      message: "Denied Creating Server"
+
+  notify_ask_failed:
+    action: core.echo
+    input:
+      message: "Request to run commands failed"

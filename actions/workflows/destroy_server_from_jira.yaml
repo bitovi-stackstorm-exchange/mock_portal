@@ -1,0 +1,27 @@
+version: 1.0
+
+input:
+  # jira webhook data
+  - alert_data
+
+vars:
+  - server_id_field: customfield_10044
+
+tasks:
+
+
+  # TODO: hanlde no server id or no inquiry (i.e. pending-to-destroyed)
+  destroy_server:
+    action: mock_cloud_provider.delete_server
+    input:
+      server_id: <% ctx().alert_data.fields[ctx().server_id_field].value %>
+    next:
+      - when: <% succeeded() %>
+        do:
+          - set_destroyed
+
+  set_destroyed:
+    action: jira.transition_issue_by_name
+    input:
+      issue: <% ctx().alert_data.issue.key %>
+      transition_name: destroy-to-destroyed
