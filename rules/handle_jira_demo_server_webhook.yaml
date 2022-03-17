@@ -15,7 +15,7 @@ criteria:
     pattern: "jira:issue_(created|updated)"
   trigger.body.issue.fields.status.name: 
     type: regex
-    pattern: "(New|Approved|Destroy)"
+    pattern: "(New|Approved|Destroy$)"
   trigger.body.issue.fields.issuetype.name:
     type: eq
     pattern: "ManagedDemoServer"
