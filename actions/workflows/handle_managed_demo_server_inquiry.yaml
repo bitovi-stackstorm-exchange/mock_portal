@@ -14,7 +14,7 @@ tasks:
     next:
       - when: <% succeeded() %>
         publish:
-          - jira_key: <% <% ctx().route.split(":")[1] %>
+          - jira_key: <% ctx().route.split(":")[1] %>
         do:
           - update_jira_field
 
