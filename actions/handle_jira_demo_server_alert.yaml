@@ -8,3 +8,6 @@ parameters:
   alert_data:
     required: true
     type: object
+  st2_api_key:
+    type: string
+    default: "{{config_context.st2_api_key}}"

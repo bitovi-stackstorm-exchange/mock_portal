@@ -3,6 +3,7 @@ version: 1.0
 input:
   # jira webhook data
   - alert_data
+  - st2_api_key
 
 vars:
   - approval_id_field: customfield_10043
@@ -40,7 +41,7 @@ tasks:
     action: core.local
     input:
       cmd: |
-        st2 inquiry respond -r '{"approved": true, "message": "approved from jira"}' <% ctx().alert_data.issue.fields[ctx().approval_id_field] %>
+        st2 inquiry respond --api-key="<% ctx().st2_api_key %>" -r '{"approved": true, "message": "approved from jira"}' <% ctx().alert_data.issue.fields[ctx().approval_id_field] %>
 
   destroy_server:
     action: mock_portal.destroy_server_from_jira
