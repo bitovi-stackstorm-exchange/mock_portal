@@ -18,17 +18,17 @@ tasks:
       - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "New" %>
         do: create_server
       - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Pending" %>
-        do: noop
+        do: do_nothing
       - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Approved" %>
         do: approve_server
       - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Running" %>
-        do: noop
+        do: do_nothing
       - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Destroy" %>
         do: destroy_server
       - when: <% succeeded() and ctx().alert_data.issue.fields.status.name = "Destroyed" %>
-        do: noop
+        do: do_nothing
 
-  noop:
+  do_nothing:
     action: core.noop
 
   create_server:
