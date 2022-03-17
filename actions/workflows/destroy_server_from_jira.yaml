@@ -14,7 +14,7 @@ tasks:
   destroy_server:
     action: mock_cloud_provider.delete_server
     input:
-      server_id: <% ctx().alert_data.fields[ctx().server_id_field].value %>
+      server_id: <% ctx().alert_data.issue.fields[ctx().server_id_field] %>
     next:
       - when: <% succeeded() %>
         do:

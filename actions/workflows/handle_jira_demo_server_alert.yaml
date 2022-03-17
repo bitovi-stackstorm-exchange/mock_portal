@@ -40,7 +40,7 @@ tasks:
     action: core.local
     input:
       cmd: |
-        st2 inquiry respond -r '{"approved": true, "message": "approved from jira"}' <% ctx().alert_data.fields[ctx().approval_id_field].value %>
+        st2 inquiry respond -r '{"approved": true, "message": "approved from jira"}' <% ctx().alert_data.issue.fields[ctx().approval_id_field] %>
 
   destroy_server:
     action: mock_portal.destroy_server_from_jira
