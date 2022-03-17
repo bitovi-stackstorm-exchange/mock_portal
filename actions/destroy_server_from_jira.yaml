@@ -1,0 +1,10 @@
+---
+name: destroy_server_from_jira
+description: Destroy a server from a jira alert
+runner_type: orquesta
+entry_point: workflows/destroy_server_from_jira.yaml
+enabled: true
+parameters:
+  alert_data:
+    required: true
+    type: object
