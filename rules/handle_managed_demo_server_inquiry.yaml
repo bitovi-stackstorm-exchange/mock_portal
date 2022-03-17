@@ -1,7 +1,7 @@
 ---
 name: "handle_managed_demo_server_inquiry"
 description: Handle inquiry from managed demo servers
-enabled: false
+enabled: true
 
 trigger:
   type: core.st2.generic.inquiry
